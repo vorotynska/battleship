@@ -1,6 +1,6 @@
 // src/ship.js
 
-export default class Ship {
+class Ship {
     constructor(length) {
         if (!Number.isInteger(length) || length <= 0) {
             throw new Error("Invalid ship length");
@@ -19,3 +19,7 @@ export default class Ship {
         return this.hits.every(Boolean);
     }
 }
+
+module.exports = {
+    Ship
+};
