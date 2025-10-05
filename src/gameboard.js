@@ -1,8 +1,12 @@
 // src/gameboard.js
-class Gameboard {
+const {
+    Ship
+} = require("../src/ship");
+
+class GameBoard {
     constructor(size = 10) {
         if (!Number.isInteger(size) || size <= 0) throw new Error("Invalis board size");
-        this.size = sise;
+        this.size = size;
         // track ships: each entry { ships, coords: [ [x,y], ... ]}
         this.ships = [];
         // attacked set to avoid double shots (stringified coords)
@@ -93,5 +97,5 @@ class Gameboard {
 }
 
 module.exports = {
-    Gameboard
+    GameBoard
 };
