@@ -1,6 +1,10 @@
 // src/index.js
 import {
-    ship
-} from "./ship.js";
+    DOMController
+} from "./domController";
 import "./styles.css";
-console.log(ship);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const controller = new DOMController();
+    controller.init();
+})
