@@ -11,7 +11,7 @@ class DOMController {
         this.game = new Game("Player");
         this.playerBoardEl = document.querySelector("#player-board");
         this.cpuBoardEl = document.querySelector("#cpu-board");
-        this.messageEl = document.querySelector("message");
+        this.messageEl = document.querySelector("#message");
     }
 
     /**
@@ -19,19 +19,19 @@ class DOMController {
      * 
      */
     init() {
-        // automatic placement of ship
-        this.autoPlaceShip(this.game.human.board);
-        this.autoPlaceShip(this.game.computer.board);
+        // автоматическая расстановка кораблей
+        this.autoPlaceShips(this.game.human.board);
+        this.autoPlaceShips(this.game.computer.board);
 
         this.renderBoards();
-        this.updateMessage("Your move!");
+        this.updateMessage("Ваш ход!");
         this.addBoardListeners();
     }
 
     /**
      * Automatic placement of ship
      */
-    autoPlaceShip(board) {
+    autoPlaceShips(board) {
         const ships = [
             new Ship(4),
             new Ship(3),
@@ -57,7 +57,7 @@ class DOMController {
                     board.placeShip(x, y, direction, ship);
                     placed = true;
                 } catch {
-                    // We try again if we couldn't place it (busy or out of bounds)
+                    // пробуем снова, если не удалось поставить (занято или за границами)
                 }
             }
         }
@@ -84,8 +84,9 @@ class DOMController {
                 cellEl.dataset.y = y;
 
                 if (!isEnemy && cell.hasShip) {
-                    cell.classList.add("ship");
+                    cellEl.classList.add("ship");
                 }
+
                 if (cell.hit) cellEl.classList.add("hit");
                 if (cell.missed) cellEl.classList.add("miss");
 
@@ -108,26 +109,30 @@ class DOMController {
             const y = +cell.dataset.y;
             const result = this.game.humanAttack(x, y);
 
+            // если уже стреляли — ничего не делаем
+            if (result.result === "already") return;
+
             this.renderBoards();
 
             if (this.game.getWinner()) {
-                this.updateMessage(`🏆 Winner ${this.game.getWinner()}!`);
+                this.updateMessage(`🎉 Победил ${this.game.getWinner()}!`);
                 return;
             }
 
-            this.updateMessage("Computer move ...");
+            this.updateMessage("Ход компьютера...");
             setTimeout(() => {
                 this.game.computerAttack();
                 this.renderBoards();
 
                 if (this.game.getWinner()) {
-                    this.updateMessage(`🥇 Winner ${this.game.getWinner()}!`);
+                    this.updateMessage(`🎉 Победил ${this.game.getWinner()}!`);
                 } else {
-                    this.updateMessage("You move!");
+                    this.updateMessage("Ваш ход!");
                 }
             }, 800);
         });
     }
+
     /**
      * Message to the player
      */

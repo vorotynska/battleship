@@ -39,7 +39,7 @@ h1 {
 }
 
 .cell.ship {
-  background: #7fa8ff;
+  background: #3b5388;
 }
 
 .cell.hit {
@@ -47,7 +47,11 @@ h1 {
 }
 
 .cell.miss {
-  background: lightgray;
+  background: rgb(63, 44, 44);
+}
+
+.cell:hover {
+  background-color: #395ca1;
 }
 
 #message {

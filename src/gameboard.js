@@ -7,6 +7,19 @@ class GameBoard {
     constructor(size = 10) {
         if (!Number.isInteger(size) || size <= 0) throw new Error("Invalis board size");
         this.size = size;
+        // create a visual grid for drawing
+        this.grid = Array.from({
+                length: size
+            }, () =>
+            Array.from({
+                length: size
+            }, () => ({
+                hasShip: false,
+                hit: false,
+                missed: false,
+                ship: null,
+            }))
+        );
         // track ships: each entry { ships, coords: [ [x,y], ... ]}
         this.ships = [];
         // attacked set to avoid double shots (stringified coords)
@@ -63,7 +76,9 @@ class GameBoard {
         }
         const key = `${x},${y}`;
         if (this.attacked.has(key)) {
-            throw new Error("This coordinate was already attacked");
+            return {
+                result: "already"
+            };
         }
         this.attacked.add(key);
 
