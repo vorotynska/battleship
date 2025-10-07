@@ -63,7 +63,11 @@ class GameBoard {
             const nx = x + (orientation === "H" ? i : 0);
             const ny = y + (orientation === "V" ? i : 0);
             coords.push([nx, ny]);
+
+            this.grid[nx][ny].hasShip = true;
+            this.grid[nx][ny].ship = ship;
         }
+
         this.ships.push({
             ship,
             coords
@@ -82,12 +86,38 @@ class GameBoard {
         }
         this.attacked.add(key);
 
+        /**
+         *const cell = this.grid[x][y];
+            if (cell.hasShip && cell.ship) {
+                cell.hit = true; // 🔹 визуально отмечаем попадание
+                cell.ship.hit();
+
+                if (cell.ship.isSunk()) {
+                    return {
+                        result: "sunk",
+                        shipLength: cell.ship.length
+                    };
+                }
+                return {
+                    result: "hit"
+                };
+            } else {
+                cell.missed = true; // 🔹 визуально отмечаем промах
+                return {
+                    result: "miss"
+                };
+            } 
+         */
+
         // find if any ship occupies this cell
         for (const record of this.ships) {
             for (let idx = 0; idx < record.coords.length; idx++) {
                 const [sx, sy] = record.coords[idx];
                 if (sx === x && sy === y) {
                     // hit ship at index idx
+                    const cell = this.grid[x][y];
+                    cell.hit = true;
+                    cell.ship = record.ship;
                     record.ship.hitAt(idx);
                     if (record.ship.isSunk()) {
                         return {
@@ -101,9 +131,13 @@ class GameBoard {
                 }
             }
         }
+        // if miss
+        const cell = this.grid[x][y];
+        cell.missed = true;
         return {
             result: "miss"
         };
+
     }
 
     allShipsSunk() {

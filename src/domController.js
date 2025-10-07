@@ -5,10 +5,15 @@ const {
 const {
     Ship
 } = require("./ship");
+const {
+    DragManager
+} = require("./dragManager");
+
 
 class DOMController {
     constructor() {
-        this.game = new Game("Player");
+        // this.game = new Game("Player");
+        this.restartBtn = document.querySelector("#restart-btn");
         this.playerBoardEl = document.querySelector("#player-board");
         this.cpuBoardEl = document.querySelector("#cpu-board");
         this.messageEl = document.querySelector("#message");
@@ -19,13 +24,34 @@ class DOMController {
      * 
      */
     init() {
+        this.game = new Game("Player");
+
         // автоматическая расстановка кораблей
         this.autoPlaceShips(this.game.human.board);
         this.autoPlaceShips(this.game.computer.board);
 
         this.renderBoards();
+        // Drag & Drop
+        const dock = document.querySelector("#ship-dock");
+        this.dragManager = new DragManager(this.playerBoardEl, this.game.human.board, () => {
+            this.renderBoards();
+        });
+        this.dragManager.renderShipDock(dock);
+        this.dragManager.enable();
+
+
         this.updateMessage("Ваш ход!");
         this.addBoardListeners();
+        this.addRestartListener();
+    }
+    addRestartListener() {
+        if (!this.restartBtn) return;
+        this.restartBtn.addEventListener("click", () => {
+            this.updateMessage("🔄 Перезапуск игры...");
+            setTimeout(() => {
+                this.init();
+            }, 300);
+        });
     }
 
     /**
