@@ -74,7 +74,7 @@ h1 {
   padding: 5px 8px;
   border-radius: 6px;
   cursor: grab;
-  user-select: none;
+  /* user-select: none; */
   font-size: 18px;
   transition: transform 0.2s;
 }
@@ -82,10 +82,17 @@ h1 {
   cursor: grabbing;
   transform: scale(1.05);
 }
+.draggable-ship.placed {
+  opacity: 0.4;
+  filter: grayscale(60%);
+  pointer-events: none;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s;
+}
+
 .cell.drop-target {
   outline: 2px dashed #0077b6;
 }
-
 
 .draggable-ship.selected {
   outline: 2px solid #ffd60a;

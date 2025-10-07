@@ -1,32 +1,4 @@
 // __test__/domController.test.js
-/**
- * @jest-environment jsdom
- */
-const {
-    DOMController
-} = require("../src/domController");
-const {
-    Game
-} = require("../src/game");
-
-/**
- * @jest-environment jsdom
- */
-const {
-    DOMController
-} = require("../src/domController");
-
-test("renders initial message", () => {
-    document.body.innerHTML = `
-    <div id="message"></div>
-    <div id="player-board"></div>
-    <div id="cpu-board"></div>
-  `;
-    const dom = new DOMController();
-    dom.updateMessage("Привет!");
-    expect(document.querySelector("#message").textContent).toBe("Привет!");
-});
-
 
 /**
  * простые тесты DOM
@@ -76,7 +48,6 @@ describe("DOMController", () => {
 });
 
 
-
 // Чтобы изолировать тесты от реальной логики игры
 jest.mock("../src/game");
 
@@ -87,6 +58,7 @@ describe("DOMController UI tests", () => {
         // Минимальная разметка для тестов
         document.body.innerHTML = `
       <div id="message"></div>
+      <button type="button" id="restart-btn">🔄 Новая игра</button>
       <div id="player-board"></div>
       <div id="cpu-board"></div>
     `;
@@ -147,4 +119,16 @@ describe("DOMController UI tests", () => {
         // Проверяем, что после клика сообщение обновилось
         expect(document.querySelector("#message").textContent).toContain("Ход");
     });
+
+    test("restart button resets the game", () => {
+        const mockInit = jest.spyOn(dom, "init"); // monitor the init call
+        const restartBtn = document.createElement("button");
+        restartBtn.id = "restart-btn";
+        document.body.appendChild(restartBtn);
+
+        dom.addRestartListener();
+        restartBtn.click(); // imitate pressing
+        expect(mockInit).toHaveBeenCalled(); // check that init has been called again
+        expect(document.querySelector("#message").textContent).toContain("🔄 Restarting the game...");
+    })
 });

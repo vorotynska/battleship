@@ -26,15 +26,9 @@ class DragManager {
         container.innerHTML = "";
         const ships = [
             new Ship(4),
-            new Ship(3),
-            new Ship(3),
-            new Ship(2),
-            new Ship(2),
-            new Ship(2),
-            new Ship(1),
-            new Ship(1),
-            new Ship(1),
-            new Ship(1),
+            new Ship(3), new Ship(3),
+            new Ship(2), new Ship(2), new Ship(2),
+            new Ship(1), new Ship(1), new Ship(1), new Ship(1),
         ];
 
         ships.forEach((ship, index) => {
@@ -47,14 +41,26 @@ class DragManager {
             shipEl.textContent = "🚢".repeat(ship.length);
 
             shipEl.addEventListener("dragstart", (e) => {
+                // if the ship is already placed, we don't allow it to be moved
+                if (shipEl.classList.contains("placed")) {
+                    e.preventDefault();
+                    return;
+                }
                 this.dragData = {
                     length: ship.length,
                     orientation: shipEl.dataset.orientation,
                     shipInstance: ship,
                     id: index,
+                    element: shipEl,
                 };
                 e.dataTransfer.effectAllowed = "move";
+                shipEl.classList.add("dragging");
             });
+
+            shipEl.addEventListener("dragend", () => {
+                shipEl.classList.remove("dragging");
+                this.dragData = null;
+            })
 
             container.appendChild(shipEl);
         });
@@ -74,11 +80,15 @@ class DragManager {
             const y = +cell.dataset.y;
             const {
                 shipInstance,
-                orientation
+                orientation,
+                element
             } = this.dragData;
 
             try {
                 this.board.placeShip(x, y, orientation, shipInstance);
+                // mark the ship as placed
+                element.classList.add("placed");
+                element.draggable = false;
                 this.dragData = null;
                 this.onUpdate();
             } catch (err) {

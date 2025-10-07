@@ -17,17 +17,17 @@ class DOMController {
         this.playerBoardEl = document.querySelector("#player-board");
         this.cpuBoardEl = document.querySelector("#cpu-board");
         this.messageEl = document.querySelector("#message");
+        this.init() // first initialization
     }
 
     /**
      * Interface initialization
-     * 
      */
     init() {
         this.game = new Game("Player");
 
-        // автоматическая расстановка кораблей
-        this.autoPlaceShips(this.game.human.board);
+        // automatic placement of ship
+        //this.autoPlaceShips(this.game.human.board);
         this.autoPlaceShips(this.game.computer.board);
 
         this.renderBoards();
@@ -39,15 +39,15 @@ class DOMController {
         this.dragManager.renderShipDock(dock);
         this.dragManager.enable();
 
-
-        this.updateMessage("Ваш ход!");
+        this.updateMessage("You move!");
         this.addBoardListeners();
         this.addRestartListener();
     }
+    // button Restart
     addRestartListener() {
         if (!this.restartBtn) return;
         this.restartBtn.addEventListener("click", () => {
-            this.updateMessage("🔄 Перезапуск игры...");
+            this.updateMessage("🔄 Restarting the game...");
             setTimeout(() => {
                 this.init();
             }, 300);
@@ -60,15 +60,9 @@ class DOMController {
     autoPlaceShips(board) {
         const ships = [
             new Ship(4),
-            new Ship(3),
-            new Ship(3),
-            new Ship(2),
-            new Ship(2),
-            new Ship(2),
-            new Ship(1),
-            new Ship(1),
-            new Ship(1),
-            new Ship(1),
+            new Ship(3), new Ship(3),
+            new Ship(2), new Ship(2), new Ship(2),
+            new Ship(1), new Ship(1), new Ship(1), new Ship(1),
         ];
 
         for (const ship of ships) {
@@ -83,7 +77,7 @@ class DOMController {
                     board.placeShip(x, y, direction, ship);
                     placed = true;
                 } catch {
-                    // пробуем снова, если не удалось поставить (занято или за границами)
+                    // we'll try again if couldn't set it up (busy or out of bounds)
                 }
             }
         }
@@ -141,19 +135,19 @@ class DOMController {
             this.renderBoards();
 
             if (this.game.getWinner()) {
-                this.updateMessage(`🎉 Победил ${this.game.getWinner()}!`);
+                this.updateMessage(`🎉 Winner ${this.game.getWinner()}!`);
                 return;
             }
 
-            this.updateMessage("Ход компьютера...");
+            this.updateMessage("Computer move ...");
             setTimeout(() => {
                 this.game.computerAttack();
                 this.renderBoards();
 
                 if (this.game.getWinner()) {
-                    this.updateMessage(`🎉 Победил ${this.game.getWinner()}!`);
+                    this.updateMessage(`🎉 Winner ${this.game.getWinner()}!`);
                 } else {
-                    this.updateMessage("Ваш ход!");
+                    this.updateMessage("You move!");
                 }
             }, 800);
         });
