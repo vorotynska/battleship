@@ -63,7 +63,9 @@ describe("GameBoard attacks", () => {
 
     test("cannot attack same coordinate twice", () => {
         board.receiveAttack(0, 0);
-        expect(() => board.receiveAttack(0, 0)).toThrow("This coordinate was already attacked");
+        expect(board.receiveAttack(0, 0)).toEqual({
+            result: "already"
+        });
     });
 
     test("allShipsSunk works", () => {

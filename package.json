@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
-  },
+  "test": "jest --detectOpenHandles --forceExit"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

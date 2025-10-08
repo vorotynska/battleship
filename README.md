@@ -1,3 +1,21 @@
+test  npm test
+
+На будущее — чтобы избежать зависаний
+
+Добавь в package.json:
+"scripts": {
+  "test": "jest --detectOpenHandles --forceExit"
+}
+ 
+ 4. macOS / Linux (одной командой) если зависли тесты
+   pkill -9 -f jest в терминал Это моментально завершает все процессы, где встречается слово “jest”.
+
+ Настройка “jest” для тестирования DOM
+ /**
+ * @jest-environment jsdom
+ */
+
+
 # battleship
 **** Основная идея API ****
 

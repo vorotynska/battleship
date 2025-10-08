@@ -27,7 +27,7 @@ class DOMController {
         this.game = new Game("Player");
 
         // automatic placement of ship
-        //this.autoPlaceShips(this.game.human.board);
+        this.autoPlaceShips(this.game.human.board);
         this.autoPlaceShips(this.game.computer.board);
 
         this.renderBoards();
@@ -47,7 +47,7 @@ class DOMController {
     addRestartListener() {
         if (!this.restartBtn) return;
         this.restartBtn.addEventListener("click", () => {
-            this.updateMessage("🔄 Restarting the game...");
+            this.updateMessage("🔄 New Game");
             setTimeout(() => {
                 this.init();
             }, 300);
@@ -139,7 +139,7 @@ class DOMController {
                 return;
             }
 
-            this.updateMessage("Computer move ...");
+            this.updateMessage("Computer move");
             setTimeout(() => {
                 this.game.computerAttack();
                 this.renderBoards();
